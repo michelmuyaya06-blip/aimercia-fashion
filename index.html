@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aimercia-Fashion</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#faf7f5;color:#333}
+header{background:linear-gradient(135deg,#d4a574,#8b5a3c);color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.logo{font-size:1.8rem;font-weight:bold}
+.cart-btn{background:#fff;color:#8b5a3c;border:none;padding:.6rem 1.2rem;border-radius:25px;cursor:pointer;font-weight:bold}
+.cart-count{background:#c9302c;color:#fff;border-radius:50%;padding:2px 8px;font-size:.8rem;margin-left:5px}
+.hero{background:linear-gradient(135deg,#d4a574,#8b5a3c);color:#fff;text-align:center;padding:4rem 2rem}
+.hero h1{font-size:3rem;margin-bottom:1rem}
+.hero p{font-size:1.2rem}
+.info-bar{background:#e8f5e9;border-left:4px solid #4caf50;padding:1rem 2rem;text-align:center;color:#2e7d32}
+.products-section{padding:3rem 2rem;max-width:1200px;margin:0 auto}
+.section-title{text-align:center;font-size:2.2rem;color:#8b5a3c;margin-bottom:2rem}
+.category-filter{display:flex;justify-content:center;gap:1rem;margin-bottom:2rem;flex-wrap:wrap}
+.filter-btn{background:#fff;border:2px solid #d4a574;color:#8b5a3c;padding:.6rem 1.8rem;border-radius:25px;cursor:pointer;font-weight:bold}
+.filter-btn.active,.filter-btn:hover{background:#d4a574;color:#fff}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:2rem}
+.product-card{background:#fff;border-radius:15px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,.1);position:relative}
+.product-badge{position:absolute;top:10px;right:10px;background:#c9302c;color:#fff;padding:.3rem .8rem;border-radius:15px;font-size:.75rem;font-weight:bold}
+.product-badge.preorder{background:#d4a574}
+.product-image{width:100%;height:250px;background:#f0f0f0;overflow:hidden}
+.product-image img{width:100%;height:100%;object-fit:cover}
+.product-info{padding:1.5rem}
+.product-name{font-size:1.1rem;font-weight:bold;margin-bottom:.5rem}
+.product-description{color:#777;font-size:.85rem;margin-bottom:1rem}
+.product-footer{display:flex;justify-content:space-between;align-items:center}
+.product-price{font-size:1rem;font-weight:bold;color:#d4a574;font-style:italic}
+.add-to-cart{background:#d4a574;color:#fff;border:none;padding:.6rem 1.2rem;border-radius:25px;cursor:pointer;font-weight:bold}
+.add-to-cart.preorder{background:#c9302c}
+.cart-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:200;justify-content:center;align-items:center}
+.cart-modal.active{display:flex}
+.cart-content{background:#fff;border-radius:15px;padding:2rem;max-width:500px;width:90%;max-height:80vh;overflow-y:auto}
+.cart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;border-bottom:2px solid #f0f0f0;padding-bottom:1rem}
+.cart-header h2{color:#8b5a3c}
+.close-cart{background:none;border:none;font-size:1.5rem;cursor:pointer}
+.cart-item{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;border-bottom:1px solid #f0f0f0;gap:1rem}
+.cart-item img{width:60px;height:60px;object-fit:cover;border-radius:8px}
+.cart-item-info{flex:1}
+.cart-item-name{font-weight:bold;margin-bottom:.3rem;font-size:.9rem}
+.cart-item-status{font-size:.8rem;color:#d4a574;font-style:italic}
+.remove-item{background:#c9302c;color:#fff;border:none;padding:.3rem .8rem;border-radius:15px;cursor:pointer;font-size:.8rem}
+.cart-total{margin-top:1.5rem;padding-top:1rem;border-top:2px solid #f0f0f0;font-size:1.2rem;font-weight:bold;text-align:right;color:#8b5a3c}
+.checkout-btn{width:100%;border:none;padding:1rem;border-radius:25px;font-size:1rem;font-weight:bold;cursor:pointer;margin-top:.8rem;color:#fff}
+.btn-1{background:#25D366}
+.btn-2{background:#128C7E}
+.payment-info{background:#f0f8ff;border:1px solid #b3d9ff;border-radius:10px;padding:1rem;margin-top:1rem;text-align:center;font-size:.9rem;color:#0056b3}
+.empty-cart{text-align:center;padding:2rem;color:#999}
+footer{background:#3d2817;color:#fff;text-align:center;padding:2rem;margin-top:3rem}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">Aimercia-Fashion</div>
+<button class="cart-btn" onclick="toggleCart()">Panier <span class="cart-count" id="cartCount">0</span></button>
+</header>
+<section class="hero">
+<h1>Aimercia-Fashion</h1>
+<p>L'élégance à portée de main en RDC</p>
+</section>
+<div class="info-bar">💬 Prix sur demande - Contactez-nous pour plus d'informations</div>
+<section class="products-section">
+<h2 class="section-title">Notre Collection</h2>
+<div class="category-filter">
+<button class="filter-btn active" onclick="filterProducts('all')">Tous</button>
+<button class="filter-btn" onclick="filterProducts('vetement')">Vêtements</button>
+<button class="filter-btn" onclick="filterProducts('perruque')">Perruques</button>
+</div>
+<div class="products-grid" id="productsGrid"></div>
+</section>
+<div class="cart-modal" id="cartModal">
+<div class="cart-content">
+<div class="cart-header">
+<h2>Votre Panier</h2>
+<button class="close-cart" onclick="toggleCart()">X</button>
+</div>
+<div id="cartItems"></div>
+<div class="cart-total" id="cartTotal"></div>
+<button class="checkout-btn btn-1" onclick="commander('243970095825')">🛍️ Commander (Ligne 1 : 097...)</button>
+<button class="checkout-btn btn-2" onclick="commander('243837274532')">📱 Commander (Ligne 2 : 083...)</button>
+<div class="payment-info">M-Pesa, Airtel Money, Orange Money acceptés</div>
+</div>
+</div>
+<footer>Aimercia-Fashion - Votre destination mode en RDC</footer>
+<script>
+const products=[
+{id:1,name:"Perruque Bob Lisse Noire",description:"Coupe bob élégante et lisse",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/2e5de97411c78a18ba323010fb694c59.jpg",category:"perruque",inStock:true},
+{id:2,name:"Perruque Bouclée Naturelle",description:"Boucles définies, look naturel",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/e5f04db4c4599f3b5b0dcc4cea059a05.jpg",category:"perruque",inStock:true},
+{id:3,name:"Perruque Wavy Longue",description:"Vagues profondes, cheveux longs",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/3178d28f2451fedefcbbecf960f16fbd.jpg",category:"perruque",inStock:true},
+{id:4,name:"Perruque Bouclée Courte",description:"Style court et dynamique",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/9a7641db779f980461ad7a62cb8afe8c.jpg",category:"perruque",inStock:true},
+{id:5,name:"Perruque Rousse Bouclée",description:"Couleur rousse audacieuse",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/17962fa15b190b2a2bf6d684c7059fbd.jpg",category:"perruque",inStock:false},
+{id:6,name:"Perruque Blonde Bob",description:"Blond platine, coupe au carré",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/281eb1f669da9850983198c08ba95737.jpg",category:"perruque",inStock:true},
+{id:7,name:"Perruque Lace Front HD",description:"Finition invisible, cheveux naturels",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/18a0c17ddca709ea16506e47f6848e67.jpg",category:"perruque",inStock:true},
+{id:8,name:"Perruque Pixie Cut",description:"Coupe courte moderne et élégante",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/2096cca8cd5c3e838e78e995f1d4c701.jpg",category:"perruque",inStock:true},
+{id:9,name:"Perruque Straight Longue",description:"Cheveux raides, longueur 24 pouces",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/212bf255df82cb1323611bacc0d47777.jpg",category:"perruque",inStock:true},
+{id:10,name:"Perruque Body Wave",description:"Ondulations naturelles, volume parfait",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/232453c267927eaf0ac72942c45159c6.jpg",category:"perruque",inStock:true},
+{id:11,name:"Perruque Deep Wave",description:"Boucles profondes, texture riche",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/409fb878bbebf85ec61de7675b666ee.jpg",category:"perruque",inStock:true},
+{id:12,name:"Perruque Kinky Curly",description:"Boucles serrées, look afro naturel",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/58ec29a5ff58323b42235ded320d9d59.jpg",category:"perruque",inStock:true},
+{id:13,name:"Perruque Lace Front 20\"",description:"Cheveux naturels, body wave",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/66a8e2f44d20e742f74d9765d72a8a16.jpg",category:"perruque",inStock:true},
+{id:14,name:"Perruque Synthétique Bob",description:"Nouvelle génération de fibres",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/a0e66405925a8604fbf7fc10db5d3412.jpg",category:"perruque",inStock:true},
+{id:15,name:"Perruque Pixie 100% Humaine",description:"Coupe courte nette et élégante",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/bb37faf0643d60404e3829393b8bd956bd.jpg",category:"perruque",inStock:false},
+{id:16,name:"Perruque Wavy Premium",description:"Qualité supérieure, look naturel",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/ccf3724ead4cba600a633c6857ed3e27.jpg",category:"perruque",inStock:true},
+{id:17,name:"Perruque Bouclée Élégante",description:"Style sophistiqué pour toutes occasions",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/deb8ae31a30dfc7448c3550a09deb0f3.jpg",category:"perruque",inStock:true},
+{id:18,name:"Perruque Straight Premium",description:"Cheveux lisses de haute qualité",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/ea0f326db20e6712b0bb96450f951f9b.jpg",category:"perruque",inStock:true},
+{id:19,name:"Perruque Modèle Exclusive",description:"Édition limitée, style unique",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/a19cb9a1bdd4f9775b2578488320f21.jpg",category:"perruque",inStock:true},
+{id:20,name:"Perruque Collection Spéciale",description:"Design exclusif Aimercia",image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/a9e994adb7793ed7d6fd44570e86ff8.jpg",category:"perruque",inStock:true}
+];
+let cart=JSON.parse(localStorage.getItem('cart'))||[];
+let currentFilter='all';
+function displayProducts(){
+const grid=document.getElementById('productsGrid');
+const filtered=currentFilter==='all'?products:products.filter(p=>p.category===currentFilter);
+grid.innerHTML=filtered.map(p=>'<div class="product-card">'+(p.inStock?'':'<div class="product-badge preorder">Sur commande</div>')+'<div class="product-image"><img src="'+p.image+'" alt="'+p.name+'" onerror="this.style.display=\'none\'"></div><div class="product-info"><div class="product-name">'+p.name+'</div><div class="product-description">'+p.description+'</div><div class="product-footer"><div class="product-price">💬 Prix sur demande</div><button class="add-to-cart '+(p.inStock?'':'preorder')+'" onclick="addToCart('+p.id+')">'+(p.inStock?'Ajouter':'Précommander')+'</button></div></div></div>').join('');
+}
+function filterProducts(category){
+currentFilter=category;
+document.querySelectorAll('.filter-btn').forEach(btn=>btn.classList.remove('active'));
+event.target.classList.add('active');
+displayProducts();
+}
+function addToCart(id){
+const p=products.find(x=>x.id===id);
+const existing=cart.find(x=>x.id===id);
+if(existing)existing.quantity++;else cart.push({...p,quantity:1});
+saveCart();updateCartCount();
+alert(p.name+' ajouté au panier !');
+}
+function removeFromCart(id){
+cart=cart.filter(x=>x.id!==id);
+saveCart();updateCartCount();displayCart();
+}
+function saveCart(){localStorage.setItem('cart',JSON.stringify(cart));}
+function updateCartCount(){document.getElementById('cartCount').textContent=cart.reduce((s,i)=>s+i.quantity,0);}
+function displayCart(){
+const items=document.getElementById('cartItems');
+const total=document.getElementById('cartTotal');
+if(cart.length===0){items.innerHTML='<div class="empty-cart">Panier vide</div>';total.innerHTML='';return;}
+items.innerHTML=cart.map(i=>'<div class="cart-item"><img src="'+i.image+'" alt="'+i.name+'"><div class="cart-item-info"><div class="cart-item-name">'+i.name+' x'+i.quantity+'</div>'+(!i.inStock?'<div class="cart-item-status">Livraison 5-10 jours</div>':'')+'</div><button class="remove-item" onclick="removeFromCart('+i.id+')">Retirer</button></div>').join('');
+total.innerHTML='Articles : '+cart.reduce((s,i)=>s+i.quantity,0);
+}
+function toggleCart(){
+const m=document.getElementById('cartModal');
+m.classList.toggle('active');
+if(m.classList.contains('active'))displayCart();
+}
+function commander(numero){
+if(cart.length===0){alert('Votre panier est vide !');return;}
+let msg='️ *Nouvelle commande Aimercia-Fashion*\n\n';
+cart.forEach(i=>{msg+='▪️ '+i.name+' (x'+i.quantity+')\n';});
+msg+='\n💬 *Je souhaite connaître les prix et les modalités de paiement.*\n\nMerci de me contacter.';
+window.open('https://wa.me/'+numero+'?text='+encodeURIComponent(msg),'_blank');
+}
+displayProducts();updateCartCount();
+</script>
+</body>
+</html>
